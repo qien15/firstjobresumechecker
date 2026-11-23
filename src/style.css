@@ -860,3 +860,34 @@ select:focus-visible {
     padding: 15px 8px;
   }
 }
+
+.job-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 20px 0;
+  padding: 18px 0;
+  border-top: 1px solid #e5eaf2;
+  border-bottom: 1px solid #e5eaf2;
+}
+.job-meta dt {
+  color: #78869a;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+.job-meta dd {
+  color: #34435e;
+  font-size: 14px;
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.6;
+}
+.job-interview {
+  grid-column: 1 / -1;
+}
+@media (max-width: 550px) {
+  .job-meta {
+    grid-template-columns: 1fr;
+  }
+}

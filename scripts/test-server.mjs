@@ -56,6 +56,60 @@ assert.equal(w.jobs.length, 1);
 assert.equal(w.candidates.length, 1);
 const cid = w.candidates[0].id,
   jid = w.jobs[0].id;
+// Existing job records can receive the new order details without a data migration.
+const orderDetails = {
+  headcount: "5",
+  workingHours: "Mon–Fri 08:00–18:00",
+  allowances: "Attendance allowance RM50",
+  interviewDetails: "Tuesday 14:00\nFactory reception · Ask for HR",
+  lastConfirmed: "2026-11-23",
+};
+await act("job.save", { ...w.jobs[0], ...orderDetails });
+assert.equal(w.jobs[0].headcount, 5);
+assert.equal(w.jobs[0].interviewDetails, orderDetails.interviewDetails);
+const {
+  headcount,
+  workingHours,
+  allowances,
+  interviewDetails,
+  lastConfirmed,
+  ...legacyJob
+} = w.jobs[0];
+await act("job.save", { ...legacyJob, title: "Updated IT Support Executive" });
+assert.equal(w.jobs[0].headcount, 5);
+assert.equal(w.jobs[0].allowances, orderDetails.allowances);
+assert.equal(w.jobs[0].lastConfirmed, orderDetails.lastConfirmed);
+for (const value of [0, -1, 1.5, "abc"]) {
+  await assert.rejects(
+    () =>
+      call("action", {
+        workspace: w.id,
+        revision: w.revision,
+        action: "job.save",
+        payload: { ...w.jobs[0], headcount: value },
+      }),
+    /whole number/,
+  );
+}
+await assert.rejects(
+  () =>
+    call("action", {
+      workspace: w.id,
+      revision: w.revision,
+      action: "job.save",
+      payload: { ...w.jobs[0], lastConfirmed: "2026-02-30" },
+    }),
+  /confirmation date/,
+);
+await act("job.save", {
+  ...w.jobs[0],
+  headcount: "",
+  lastConfirmed: "",
+  allowances: "",
+});
+assert.equal(w.jobs[0].headcount, null);
+assert.equal(w.jobs[0].lastConfirmed, "");
+await act("job.save", { ...w.jobs[0], ...orderDetails });
 await act("screen.save", {
   id: cid,
   job: jid,

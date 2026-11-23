@@ -11,6 +11,11 @@ export type Job = {
   client: string;
   location: string;
   salary: string;
+  headcount?: number | null;
+  workingHours?: string;
+  allowances?: string;
+  interviewDetails?: string;
+  lastConfirmed?: string;
   description: string;
   must: string;
   nice: string;

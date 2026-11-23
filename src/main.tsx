@@ -547,6 +547,32 @@ function App() {
                     {j.client} · {j.location}
                   </p>
                   <p className="salary">{j.salary || "Salary not entered"}</p>
+                  <dl className="job-meta">
+                    <div>
+                      <dt>Recruitment headcount</dt>
+                      <dd>
+                        {j.headcount == null
+                          ? "Not recorded"
+                          : `${j.headcount} people`}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Working hours</dt>
+                      <dd>{j.workingHours || "Not recorded"}</dd>
+                    </div>
+                    <div>
+                      <dt>Allowances</dt>
+                      <dd>{j.allowances || "Not recorded"}</dd>
+                    </div>
+                    <div>
+                      <dt>Last confirmed with client</dt>
+                      <dd>{j.lastConfirmed || "Not recorded"}</dd>
+                    </div>
+                    <div className="job-interview">
+                      <dt>Interview arrangements</dt>
+                      <dd>{j.interviewDetails || "Not recorded"}</dd>
+                    </div>
+                  </dl>
                   <div className="requirement-list">
                     <strong>Must have</strong>
                     {j.must
@@ -1165,6 +1191,40 @@ function JobEditor({
         <Input name="location" label="Location" value={j?.location} />
         <Input name="salary" label="Salary range" value={j?.salary} />
       </div>
+      <div className="two">
+        <label>
+          Recruitment headcount
+          <input
+            name="headcount"
+            type="number"
+            min="1"
+            step="1"
+            defaultValue={j?.headcount ?? ""}
+            placeholder="e.g. 5"
+          />
+        </label>
+        <Input
+          name="lastConfirmed"
+          label="Last confirmed with client"
+          type="date"
+          value={j?.lastConfirmed}
+        />
+      </div>
+      <Text
+        name="workingHours"
+        label="Working hours / shifts"
+        value={j?.workingHours}
+      />
+      <Text
+        name="allowances"
+        label="Allowances and benefits"
+        value={j?.allowances}
+      />
+      <Text
+        name="interviewDetails"
+        label="Interview arrangements (date, time, location and contact)"
+        value={j?.interviewDetails}
+      />
       <Text name="description" label="Job description" value={j?.description} />
       <div className="two">
         <Text

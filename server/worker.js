@@ -97,6 +97,36 @@ function mutate(state, member, action, p) {
       "status",
     ]);
     assert(value.title && value.client, "Enter a position and client.");
+    for (const field of [
+      "workingHours",
+      "allowances",
+      "interviewDetails",
+      "lastConfirmed",
+    ]) {
+      value[field] = clean(
+        p[field] === undefined ? existing?.[field] : p[field],
+        5000,
+      );
+    }
+    const rawHeadcount =
+      p.headcount === undefined ? existing?.headcount : p.headcount;
+    value.headcount =
+      rawHeadcount == null || String(rawHeadcount).trim() === ""
+        ? null
+        : Number(rawHeadcount);
+    assert(
+      value.headcount === null ||
+        (Number.isSafeInteger(value.headcount) && value.headcount > 0),
+      "Recruitment headcount must be a positive whole number.",
+    );
+    assert(
+      !value.lastConfirmed ||
+        (/^\d{4}-\d{2}-\d{2}$/.test(value.lastConfirmed) &&
+          !Number.isNaN(Date.parse(value.lastConfirmed)) &&
+          new Date(value.lastConfirmed).toISOString().slice(0, 10) ===
+            value.lastConfirmed),
+      "Choose a valid last confirmation date.",
+    );
     assert(
       ["Open", "On hold", "Closed"].includes(value.status),
       "Invalid job status.",
