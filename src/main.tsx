@@ -1747,7 +1747,4 @@ function CandidateDetail({
     </>
   );
 }
-const publicDemo = new URLSearchParams(window.location.search).get("demo") === "1";
-createRoot(document.getElementById("root")!).render(
-  publicDemo ? <ResumeChecker /> : <App />,
-);
+createRoot(document.getElementById("root")!).render(<App />);

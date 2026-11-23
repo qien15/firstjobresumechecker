@@ -33,10 +33,6 @@ npm run build
 npm run test:server
 ```
 
-## Try the hosted demo
-
-Open the [public resume checker demo](https://firstjob-resume-checker.daringadage2.chatgpt.site/?demo=1). No sign-in is required for the demo. The agency workspace requires an authorized account.
-
 ## Hosted deployment
 
 The production artifact is dist/server/index.js. scripts/build-worker.mjs embeds the Vite client assets in the Worker. The hosted app uses a private R2 bucket bound as `BUCKET` and authenticated user headers supplied by the hosting platform. The original Sites project configuration is not included in this repository. For an independent deployment, configure your own bucket and authentication gateway. The gateway must strip client-supplied identity headers and inject verified identities. Do not expose the Worker through an endpoint that bypasses that gateway. API handlers reject missing identity and authorize workspace membership and writes server-side.
